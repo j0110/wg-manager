@@ -7,6 +7,7 @@ import os
 import sys
 import subprocess
 import re
+import time
 import pathlib
 import shutil
 import json
@@ -166,7 +167,7 @@ def is_connected(client_pubkey):
     json_parsed = json.loads(subprocess.run(["/usr/share/doc/wireguard-tools/examples/json/wg-json"], capture_output = True).stdout.decode("utf-8").strip())
     for interface in INTERFACES:
         if client_pubkey in json_parsed[interface["name"]]:
-            if int(time.time()) - int(json_parsed[interface_name][client_pubkey]["latestHandshake"]) < SETTINGS["disconnection_time"] :
+            if int(time.time()) - int(json_parsed[interface["name"]][client_pubkey]["latestHandshake"]) < SETTINGS["disconnection_time"] :
                 return interface["location"]
     return "None"
 
