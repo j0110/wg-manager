@@ -13,10 +13,8 @@ import shutil
 import json
 import tomllib
 
-with open("/etc/wireguard/conf.toml", "rb") as toml_conf:
-    general_conf = tomllib.load(toml_conf)
-    SETTINGS = general_conf["SETTINGS"]
-    INTERFACES = general_conf["INTERFACES"]
+SETTINGS = {}
+INTERFACES = []
 
 def menu():
     while True:
@@ -282,6 +280,11 @@ if __name__ == "__main__":
     else:
         os.makedirs("/etc/wireguard/clients.d", exist_ok = True)
         pathlib.Path("/etc/wireguard/clients").touch()
+        pathlib.Path("/etc/wireguard/conf.toml").touch()
+        with open("/etc/wireguard/conf.toml", "rb") as toml_conf:
+            general_conf = tomllib.load(toml_conf)
+            SETTINGS = general_conf["SETTINGS"]
+            INTERFACES = general_conf["INTERFACES"]
         for interface in INTERFACES:
             pathlib.Path("/etc/wireguard/" + interface["name"] + ".conf").touch()
         menu()
